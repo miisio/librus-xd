@@ -1,10 +1,10 @@
-/* Stylizacja jak wcześniej, z drobnymi zmianami dla lepszej czytelności */
-
+/* Globalne style */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
+    color: #333;
 }
 
 header {
@@ -67,8 +67,41 @@ button {
     cursor: pointer;
 }
 
+button:hover {
+    background-color: #005a99;
+}
+
 .error {
     color: red;
     text-align: center;
     margin-top: 10px;
+}
+
+main {
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+table th {
+    background-color: #f2f2f2;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 10px;
 }
