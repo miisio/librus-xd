@@ -17,55 +17,51 @@ document.getElementById("login-form")?.addEventListener("submit", function (even
     const user = users.find(user => user.username === username && user.password === password);
 
     if (user) {
-        // Przekierowanie do panelu z informacją o roli
+        // Przechowuj dane użytkownika w localStorage
         localStorage.setItem("role", user.role);
-        window.location.href = "dashboard.html";
+        localStorage.setItem("username", username);
+        window.location.href = "dashboard.html"; // Przekierowanie na stronę główną
     } else {
-        document.getElementById("error-message").textContent = "Nieprawidłowy login lub hasło!";
+        document.getElementById("error-message").textContent = "Niepoprawny użytkownik lub hasło!";
     }
 });
 
-// Generowanie zawartości panelu
-if (window.location.pathname.includes("dashboard.html")) {
+// Logika wylogowywania
+function logout() {
+    localStorage.removeItem("role");
+    localStorage.removeItem("username");
+    window.location.href = "index.html"; // Powrót na stronę logowania
+}
+
+// Sprawdzenie roli użytkownika na dashboardzie
+function setupDashboard() {
     const role = localStorage.getItem("role");
+    const username = localStorage.getItem("username");
+    if (!role || !username) {
+        window.location.href = "index.html"; // Przekierowanie do logowania
+    }
 
     const menu = document.getElementById("menu");
     const content = document.getElementById("content");
 
+    // Zależnie od roli użytkownika, wypełniamy menu i treść
     if (role === "student") {
         menu.innerHTML = `
-            <li><a href="#grades">Oceny</a></li>
-            <li><a href="#attendance">Frekwencja</a></li>
-            <li><a href="#schedule">Plan lekcji</a></li>
-            <li><a href="index.html">Wyloguj</a></li>
+            <li><a href="grades.html">Oceny</a></li>
+            <li><a href="attendance.html">Frekwencja</a></li>
+            <li><a href="schedule.html">Plan lekcji</a></li>
         `;
-
-        content.innerHTML = `
-            <h2>Oceny</h2>
-            <p>Matematyka: 5</p>
-            <p>Polski: 4</p>
-            <h2>Frekwencja</h2>
-            <p>Obecności: 90%</p>
-            <h2>Plan lekcji</h2>
-            <p>Poniedziałek: Matematyka, Polski, Historia</p>
-        `;
+        content.innerHTML = `<p>Witaj, ${username}!<p>`;
     } else if (role === "teacher") {
         menu.innerHTML = `
-            <li><a href="#grades">Zarządzaj ocenami</a></li>
-            <li><a href="#attendance">Zarządzaj frekwencją</a></li>
-            <li><a href="#schedule">Edytuj plan lekcji</a></li>
-            <li><a href="index.html">Wyloguj</a></li>
+            <li><a href="grades.html">Oceny</a></li>
+            <li><a href="schedule.html">Plan lekcji</a></li>
         `;
-
-        content.innerHTML = `
-            <h2>Zarządzaj ocenami</h2>
-            <p>Możesz dodawać, edytować i usuwać oceny uczniów.</p>
-            <h2>Zarządzaj frekwencją</h2>
-            <p>Oznaczaj obecności i nieobecności uczniów.</p>
-            <h2>Edytuj plan lekcji</h2>
-            <p>Ustaw nowe lekcje i terminy.</p>
-        `;
-    } else {
-        content.innerHTML = `<p>Błąd: Nie rozpoznano roli użytkownika.</p>`;
+        content.innerHTML = `<p>Witaj, nauczycielu ${username}!<p>`;
     }
+}
+
+// Uruchamiamy funkcję ustawiającą dashboard, jeśli użytkownik jest już zalogowany
+if (window.location.pathname === "/dashboard.html") {
+    setupDashboard();
 }
